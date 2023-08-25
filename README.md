@@ -15,29 +15,43 @@ from collections import namedtuple
 field_names = 'name description services'
 System = namedtuple('System', field_names)
 # Os campos também podemos definir assim:
-Services = namedtuple('Services', ['status', 'datetime', 'latency'])
+Services = namedtuple('Services', ('url_api', 'healthcheck'))
+HealthCheck = namedtuple('HealthCheck', 'status datetime latency')
 
 # Criando instância da namedtuple para representar um sistema de monitoramento
 system_eagle = System(name='Eagle', description='Monitoring from the sky', services=[])
+services_api_healthcheck = Services(url_api='www.system_eagle.com/healthcheck', healthcheck=[])
+services_api_database = Services(url_api='www.system_eagle.com/database', healthcheck=[])
+system_eagle.services.extend([services_api_healthcheck, services_api_database])
 
 # Registrando os dados de chamadas de API de HealthCheck no sistema de monitoramento.
 # 2ª Chamada API HealthCheck
-services_api_health_check = Services(status=True, datetime='2023-07-29 14:25:01.065', latency=292)
-system_eagle.services.append(services_api_health_check)
+healthcheck_api = HealthCheck(status=True, datetime='2023-07-29 14:25:01.065', latency=292)
+services_api_healthcheck.healthcheck.append(healthcheck_api)
+healthcheck_database = HealthCheck(status=True, datetime='2023-07-29 14:26:01.065', latency=632)
+services_api_database.healthcheck.append(healthcheck_database)
 
 # 2ª Chamada API -> Também podemos informar os valores seguindo a posição
-system_eagle.services.append(Services(False, '2023-07-29 14:30:02.052', 125))
-system_eagle.services.append(Services(False, '2023-07-29 14:35:01.027', 195))
+services_api_healthcheck.healthcheck.append(HealthCheck(False, '2023-07-29 14:30:02.052', 125))
+services_api_database.healthcheck.append(HealthCheck(False, '2023-07-29 14:35:01.027', 195))
+
 
 # Agora podemos acessar e imprimir os detalhes das chamadas de API registradas
-print(f"Sistema: {system_eagle.name} - {system_eagle.description}")
-# Sistema: Eagle - Monitoring from the sky
-for idx, service in enumerate(system_eagle.services, start=1):
-    status = "Online" if service.status else "Offline"
-    print(f"Consulta {idx}: Status: {status} | Data e Hora: {service.datetime} | Latência: {service.latency} ms")
+print(f"Sistema: {system_eagle.name} - {system_eagle.description}:\n")
+for service in system_eagle.services:
+    for healthcheck in service.healthcheck:
+        status = "Online" if healthcheck.status else "Offline"
+        print(f"API: {service.url_api} | Status: {status} | Data e Hora: {healthcheck.datetime} | Latência: {healthcheck.latency} ms")
+    print()  # Adding a blank line between services
 
-#	Consulta 1: Status: Online | Data e Hora: 2023-07-29 14:25:01.065 | Latência: 292 ms
-#	Consulta 2: Status: Offline | Data e Hora: 2023-07-29 14:30:02.052 | Latência: 125 ms
-#	Consulta 3: Status: Offline | Data e Hora: 2023-07-29 14:35:01.027 | Latência: 195 ms
+'''
+    Sistema: Eagle - Monitoring from the sky
+
+    API: www.system_eagle.com/healthcheck | Status: Online | Data e Hora: 2023-07-29 14:25:01.065 | Latência: 292 ms
+    API: www.system_eagle.com/healthcheck | Status: Offline | Data e Hora: 2023-07-29 14:30:02.052 | Latência: 125 ms
+
+    API: www.system_eagle.com/database | Status: Online | Data e Hora: 2023-07-29 14:26:01.065 | Latência: 632 ms
+    API: www.system_eagle.com/database | Status: Offline | Data e Hora: 2023-07-29 14:35:01.027 | Latência: 195 ms
+'''
 ```
 Neste exemplo, estamos usando a collections.namedtuple para criar uma estrutura de dados para sistemas de monitoramento e seus serviços associados. Registramos dados de chamadas de API no sistema e, em seguida, imprimimos esses detalhes de forma organizada.
