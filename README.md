@@ -34,10 +34,10 @@ print(f"Sistema: {system_eagle.name} - {system_eagle.description}")
 # Sistema: Eagle - Monitoring from the sky
 for idx, service in enumerate(system_eagle.services, start=1):
     status = "Online" if service.status else "Offline"
-    print(f"Serviço {idx}: Status: {status} | Data e Hora: {service.datetime} | Latência: {service.latency} ms")
+    print(f"Status {idx}: Status: {status} | Data e Hora: {service.datetime} | Latência: {service.latency} ms")
 
-#	Serviço 1: Status: Online | Data e Hora: 2023-07-29 14:25:01.065 | Latência: 292 ms
-#	Serviço 2: Status: Offline | Data e Hora: 2023-07-29 14:30:02.052 | Latência: 125 ms
-#	Serviço 3: Status: Offline | Data e Hora: 2023-07-29 14:35:01.027 | Latência: 195 ms
+#	Status 1: Status: Online | Data e Hora: 2023-07-29 14:25:01.065 | Latência: 292 ms
+#	Status 2: Status: Offline | Data e Hora: 2023-07-29 14:30:02.052 | Latência: 125 ms
+#	Status 3: Status: Offline | Data e Hora: 2023-07-29 14:35:01.027 | Latência: 195 ms
 ```
 Neste exemplo, estamos usando a collections.namedtuple para criar uma estrutura de dados para sistemas de monitoramento e seus serviços associados. Registramos dados de chamadas de API no sistema e, em seguida, imprimimos esses detalhes de forma organizada.
